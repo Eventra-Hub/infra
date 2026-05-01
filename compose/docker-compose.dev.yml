@@ -1,0 +1,20 @@
+services:
+  user-service:
+    ports:
+      - "8001:8000"
+  event-service:
+    ports:
+      - "8002:8000"
+  registration-service:
+    ports:
+      - "8003:8000"
+  notification-service:
+    ports:
+      - "8004:8000"
+  mongo:
+    ports:
+      - "27017:27017"
+  rabbitmq:
+    ports:
+      - "5672:5672"
+      - "15672:15672"

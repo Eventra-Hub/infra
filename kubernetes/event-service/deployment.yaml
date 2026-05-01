@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-service
+  template:
+    metadata:
+      labels:
+        app: event-service
+    spec:
+      containers:
+        - name: event-service
+          image: event-service:dev
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SERVICE_NAME
+              value: "event-service"
+            - name: DB_NAME
+              value: "event_db"
+            - name: PORT
+              value: "8000"
+            - name: MONGO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: shared-config
+                  key: MONGO_URL
+            - name: RABBITMQ_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: shared-config
+                  key: RABBITMQ_URL
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: shared-secrets
+                  key: JWT_SECRET
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 20
+            periodSeconds: 20

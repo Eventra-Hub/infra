@@ -1,0 +1,26 @@
+services:
+  user-service:
+    ports:
+      - "8201:8000"
+    restart: always
+  event-service:
+    ports:
+      - "8202:8000"
+    restart: always
+  registration-service:
+    ports:
+      - "8203:8000"
+    restart: always
+  notification-service:
+    ports:
+      - "8204:8000"
+    restart: always
+  mongo:
+    ports:
+      - "27217:27017"
+    restart: always
+  rabbitmq:
+    ports:
+      - "5872:5672"
+      - "15872:15672"
+    restart: always

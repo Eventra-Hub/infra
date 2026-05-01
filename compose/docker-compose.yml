@@ -1,0 +1,97 @@
+services:
+  user-service:
+    build:
+      context: ../../user-service
+    env_file:
+      - ../../user-service/.env
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      - event-network
+
+  event-service:
+    build:
+      context: ../../event-service
+    env_file:
+      - ../../event-service/.env
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      - event-network
+
+  registration-service:
+    build:
+      context: ../../registration-service
+    env_file:
+      - ../../registration-service/.env
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      user-service:
+        condition: service_started
+      event-service:
+        condition: service_started
+    restart: on-failure
+    networks:
+      - event-network
+
+  notification-service:
+    build:
+      context: ../../notification-service
+    env_file:
+      - ../../notification-service/.env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      - event-network
+
+  mongo:
+    image: mongo:6
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - event-network
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "devcookie"
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_port_connectivity"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+      start_period: 40s
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - event-network
+
+volumes:
+  mongo-data:
+  rabbitmq-data:
+
+networks:
+  event-network:
+    driver: bridge

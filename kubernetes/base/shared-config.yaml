@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shared-config
+data:
+  MONGO_URL: "mongodb://mongo:27017"
+  RABBITMQ_URL: "amqp://guest:guest@rabbitmq:5672/"
+  USER_SERVICE_URL: "http://user-service:8000"
+  EVENT_SERVICE_URL: "http://event-service:8000"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: shared-secrets
+type: Opaque
+stringData:
+  JWT_SECRET: "supersecret"

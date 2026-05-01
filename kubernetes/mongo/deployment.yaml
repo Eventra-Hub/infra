@@ -1,4 +1,14 @@
-#how to run Mongo
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,4 +33,5 @@ spec:
               mountPath: /data/db
       volumes:
         - name: mongo-storage
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: mongo-pvc

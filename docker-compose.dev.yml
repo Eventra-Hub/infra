@@ -1,21 +1,2 @@
-services:
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    networks:
-      - event-network
-
-  mongo:
-    image: mongo:6
-    container_name: mongo
-    ports:
-      - "27017:27017"
-    networks:
-      - event-network
-
-networks:
-  event-network:
-    driver: bridge
+# Moved to compose/. Use:
+#   docker compose -p events-dev -f compose/docker-compose.yml -f compose/docker-compose.dev.yml up -d --build
