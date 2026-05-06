@@ -30,6 +30,11 @@ spec:
                 configMapKeyRef:
                   name: shared-config
                   key: RABBITMQ_URL
+            - name: REDIS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: shared-config
+                  key: REDIS_URL
           readinessProbe:
             httpGet:
               path: /healthz

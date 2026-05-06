@@ -5,6 +5,7 @@ metadata:
 data:
   MONGO_URL: "mongodb://mongo:27017"
   RABBITMQ_URL: "amqp://guest:guest@rabbitmq:5672/"
+  REDIS_URL: "redis://redis:6379/0"
   USER_SERVICE_URL: "http://user-service:8000"
   EVENT_SERVICE_URL: "http://event-service:8000"
 ---

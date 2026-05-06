@@ -53,6 +53,8 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: on-failure
     networks:
       - event-network
@@ -88,9 +90,24 @@ services:
     networks:
       - event-network
 
+  redis:
+    image: redis:7.2-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+    volumes:
+      - redis-data:/data
+    networks:
+      - event-network
+
 volumes:
   mongo-data:
   rabbitmq-data:
+  redis-data:
 
 networks:
   event-network:
