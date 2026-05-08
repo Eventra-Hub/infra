@@ -18,3 +18,8 @@ services:
     ports:
       - "5772:5672"
       - "15772:15672"
+  redis:
+    image: redis:7.2-alpine
+    ports:
+      - "6381:6379"  # Allows your local tests to connect to Redis
+    restart: always
