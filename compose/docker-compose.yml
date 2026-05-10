@@ -4,6 +4,8 @@ services:
       context: ../../user-service
     env_file:
       - ../../user-service/.env
+    ports:
+      - "8001:8000"
     depends_on:
       mongo:
         condition: service_healthy
@@ -18,6 +20,8 @@ services:
       context: ../../event-service
     env_file:
       - ../../event-service/.env
+    ports:
+      - "8002:8000"
     depends_on:
       mongo:
         condition: service_healthy
@@ -32,6 +36,8 @@ services:
       context: ../../registration-service
     env_file:
       - ../../registration-service/.env
+    ports:
+      - "8003:8000"
     depends_on:
       mongo:
         condition: service_healthy
@@ -50,6 +56,8 @@ services:
       context: ../../notification-service
     env_file:
       - ../../notification-service/.env
+    ports:
+      - "8004:8000"
     depends_on:
       rabbitmq:
         condition: service_healthy

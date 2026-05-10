@@ -45,6 +45,11 @@ spec:
                 configMapKeyRef:
                   name: shared-config
                   key: EVENT_SERVICE_URL
+            - name: CORS_ORIGINS
+              valueFrom:
+                configMapKeyRef:
+                  name: shared-config
+                  key: CORS_ORIGINS
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
